@@ -21,13 +21,15 @@ public:
 	void insertCoin(InterfaceCoin* coin);
 	void displayProducts();
 	void displayCoinsInHolder();
+	void cancel(Wallet* wallet);
 	void purchaseProduct(Wallet* wallet, std::string product);
+
 
 private:
 	ProductFactory *productFactory;
 	std::map<std::string, int>* productsWithCount;
-	std::vector<InterfaceCoin*>* coinsInMachine;
 	std::vector<InterfaceCoin*> coinsInHolder;
+	std::vector<InterfaceCoin*>* coinsInMachine;
 	double calculateCoinsInHolder();
 	void placeCoinsFromHolderToMachine();
 	std::vector<InterfaceCoin*> getChange(double value);

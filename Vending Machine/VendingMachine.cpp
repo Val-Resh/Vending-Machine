@@ -2,12 +2,25 @@
 
 void VendingMachine::displayProducts()
 {
-	for (auto const& pairs : *productsWithCount)
-	{
+	for (auto& pairs : *productsWithCount)
+	{	
+		ProductInterface *p = this->productFactory->getProductInstance(pairs.first);
 		std::cout << pairs.first
-			<< ": " << pairs.second << " in stock." << std::endl;
+			<< ": " << pairs.second << " in stock. Price: " <<
+			p->getPrice() << std::endl;
+		delete p;
 	}
 }
+
+void VendingMachine::cancel(Wallet* wallet)
+{
+	for (int i = 0; i < coinsInHolder.size(); i++)
+	{
+		wallet->putCoin(coinsInHolder.at(i));
+	}
+	coinsInHolder.clear();
+}
+
 
 VendingMachine::~VendingMachine()
 {
@@ -22,7 +35,7 @@ VendingMachine::~VendingMachine()
 		delete coin;
 	}
 	coinsInHolder.clear();
-	delete this->productFactory;
+	delete productFactory;
 }
 
 void VendingMachine::insertCoin(InterfaceCoin* coin)
@@ -48,39 +61,42 @@ double VendingMachine::calculateCoinsInHolder()
 void VendingMachine::purchaseProduct(Wallet* wallet, std::string product)
 {
 	double totalCoinsInHolder = calculateCoinsInHolder();
-	for (auto const& pairs : *productsWithCount)
+	for (auto& pairs : *productsWithCount)
 	{
-		if (pairs.first.compare(product))
+		if (pairs.first == product)
 		{
 			if (pairs.second > 0)
 			{
 				ProductInterface* prod = this->productFactory->getProductInstance(product);
 				double productPrice = prod->getPrice();
-				if (productPrice < totalCoinsInHolder)
+				if (productPrice <= totalCoinsInHolder)
 				{
-					std::cout << "You have purchased a " << prod->getProductName() << std::endl;
-					double change = productPrice - totalCoinsInHolder;
+					std::cout << "You have purchased a " << prod->getProductName() << "\n" << std::endl;
+					double change = totalCoinsInHolder - productPrice;
 					placeCoinsFromHolderToMachine();
 					std::vector<InterfaceCoin*> changeCoins = getChange(change);
 					for (auto& coin : changeCoins)
 					{
 						wallet->putCoin(coin);
 					}
-					std::cout << change << " returned as change." << std::endl;
+					(*productsWithCount)[product]--;
+					std::cout << change << " returned as change.\n" << std::endl;
+					break;
 				}
 				else
 				{
-					std::cout << "Not enough credit. Insert more coins." << std::endl;
+					std::cout << "Not enough credit. Insert more coins.\n" << std::endl;
 				}
 				delete prod;
 			}
 			else
 			{
-				std::cout << "Product not in stock." << std::endl;
+				std::cout << "Product not in stock.\n" << std::endl;
 			}
 			break;
 		}
 	}
+	//std::cout << "Product not found.\n" << std::endl;
 }
 
 void VendingMachine::placeCoinsFromHolderToMachine()
@@ -96,7 +112,9 @@ std::vector<InterfaceCoin*> VendingMachine::getChange(double value)
 {
 	std::vector<InterfaceCoin*> change;
 	std::vector<int> indecesToErase;
-	std::sort(coinsInMachine->begin(), coinsInMachine->end());
+	std::sort(coinsInMachine->begin(), coinsInMachine->end(), [](InterfaceCoin* a, InterfaceCoin* b) {
+		return a->getValue() < b->getValue();
+		});
 	for (int i = coinsInMachine->size() - 1; i >= 0; i--)
 	{
 		double coin = coinsInMachine->at(i)->getValue();

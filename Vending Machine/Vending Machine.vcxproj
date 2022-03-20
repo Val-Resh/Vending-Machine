@@ -154,7 +154,7 @@
   <ItemGroup>
     <ClCompile Include="PoundSterlingCoin.cpp" />
     <ClCompile Include="ProductFactory.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="VendingMachine.cpp" />
     <ClCompile Include="Wallet.cpp" />
   </ItemGroup>

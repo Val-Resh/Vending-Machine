@@ -1,33 +1,28 @@
 #include "Wallet.h"
 #include <iostream>
 
-Wallet::Wallet()
-{
-	this->wallet = {};
-}
-
 Wallet::~Wallet()
 {
-	for (auto& coin : this->wallet)
+	for (auto& coin : *wallet)
 	{
 		delete coin;
 	}
-	this->wallet.clear();
+	delete wallet;
 }
 
 void Wallet::putCoin(InterfaceCoin* coin)
 {
-	this->wallet.push_back(coin);
+	wallet->push_back(coin);
 }
 
 InterfaceCoin* Wallet::retrieveCoin(double value)
 {
-	for (unsigned i = 0; i < this->wallet.size(); i++)
+	for (unsigned i = 0; i < wallet->size(); i++)
 	{	
-		InterfaceCoin *coin = this->wallet[i];
+		InterfaceCoin *coin = wallet->at(i);
 		if (coin->getValue() == value)
 		{
-			this->wallet.erase(this->wallet.begin()+i);
+			wallet->erase(wallet->begin()+i);
 			return coin;
 		}
 	}
@@ -37,11 +32,11 @@ InterfaceCoin* Wallet::retrieveCoin(double value)
 void Wallet::displayWallet()
 {	
 	std::cout << "You have the following coins: \n";
-	for (InterfaceCoin* coin : this->wallet)
+	for (InterfaceCoin* coin : *wallet)
 	{	
 		std::cout << coin->getValue() << ", ";
 	}
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
 }
 
 

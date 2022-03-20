@@ -148,7 +148,6 @@
     <ClInclude Include="PoundSterlingCoin.h" />
     <ClInclude Include="ProductFactory.h" />
     <ClInclude Include="ProductInterface.h" />
-    <ClInclude Include="test.h" />
     <ClInclude Include="VendingMachine.h" />
     <ClInclude Include="Wallet.h" />
   </ItemGroup>

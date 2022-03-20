@@ -9,13 +9,13 @@
 class Wallet
 {
 public:
-	Wallet();
+	Wallet(std::vector<InterfaceCoin*>* wallet) { this->wallet = wallet; };
 	~Wallet();
 	void putCoin(InterfaceCoin *coin);
 	InterfaceCoin* retrieveCoin(double value);
 	void displayWallet();
 
 private:
-	std::vector<InterfaceCoin*> wallet;
+	std::vector<InterfaceCoin*>* wallet;
 };
 

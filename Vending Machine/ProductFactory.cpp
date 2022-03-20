@@ -2,17 +2,17 @@
 
 ProductInterface* ProductFactory::getProductInstance(std::string name)
 {
-	if(name.compare("burger"))
+	if(name == "burger")
 		return new Burger();
 
-	if(name.compare("cola"))
+	else if(name == "cola")
 		return new ColaSoda();
 	
-	if(name.compare("orange"))
+	else if(name == "orange")
 		return new OrangeSoda();
 
-	if(name.compare("chocolate"))
+	else if(name == "chocolate")
 		return new Chocolate();
 
-	return new ProductInterface();
+	else  return new ProductInterface();
 }

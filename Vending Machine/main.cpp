@@ -54,9 +54,11 @@ int main()
     delete wallet;
     delete vendingMachine;
 
+    /*
     std::atexit([] {
         _CrtDumpMemoryLeaks();
         });
+        */
 }
 
 void pintInvalidCommand()

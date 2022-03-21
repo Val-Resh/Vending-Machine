@@ -131,6 +131,10 @@ bool executeCommand(int input)
     case 4:
         return false;
         break;
+
+    default:
+        return true;
+        break;
     }
 }
 void displayCommands()

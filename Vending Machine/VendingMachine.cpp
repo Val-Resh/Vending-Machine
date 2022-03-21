@@ -16,7 +16,7 @@ void VendingMachine::cancel(Wallet* wallet)
 {
 	for (int i = 0; i < coinsInHolder.size(); i++)
 	{
-		wallet->putCoin(coinsInHolder.at(i));
+		wallet->putCoin(*coinsInHolder.at(i));
 	}
 	coinsInHolder.clear();
 }
@@ -77,10 +77,12 @@ void VendingMachine::purchaseProduct(Wallet* wallet, std::string product)
 					std::vector<InterfaceCoin*> changeCoins = getChange(change);
 					for (auto& coin : changeCoins)
 					{
-						wallet->putCoin(coin);
+						wallet->putCoin(*coin);
 					}
+					changeCoins.clear();
 					(*productsWithCount)[product]--;
 					std::cout << change << " returned as change.\n" << std::endl;
+					delete prod;
 					break;
 				}
 				else
@@ -96,7 +98,6 @@ void VendingMachine::purchaseProduct(Wallet* wallet, std::string product)
 			break;
 		}
 	}
-	//std::cout << "Product not found.\n" << std::endl;
 }
 
 void VendingMachine::placeCoinsFromHolderToMachine()
@@ -111,20 +112,23 @@ void VendingMachine::placeCoinsFromHolderToMachine()
 std::vector<InterfaceCoin*> VendingMachine::getChange(double value)
 {
 	std::vector<InterfaceCoin*> change;
-	std::vector<int> indecesToErase;
+	std::vector<int> indicesToErase;
 	std::sort(coinsInMachine->begin(), coinsInMachine->end(), [](InterfaceCoin* a, InterfaceCoin* b) {
 		return a->getValue() < b->getValue();
 		});
 	for (int i = coinsInMachine->size() - 1; i >= 0; i--)
-	{
+	{	
+		if (value == 0) break;
+
 		double coin = coinsInMachine->at(i)->getValue();
-		while (value >= coin)
+		if(value >= coin)
 		{
 			value -= coin;
 			change.push_back(coinsInMachine->at(i));
+			indicesToErase.push_back(i);
 		}
 	}
-	for (int index : indecesToErase)
+	for (int index : indicesToErase)
 	{
 		coinsInMachine->erase(coinsInMachine->begin() + index);
 	}

@@ -10,9 +10,9 @@ Wallet::~Wallet()
 	delete wallet;
 }
 
-void Wallet::putCoin(InterfaceCoin* coin)
+void Wallet::putCoin(InterfaceCoin& coin)
 {
-	wallet->push_back(coin);
+	wallet->push_back(&coin);
 }
 
 InterfaceCoin* Wallet::retrieveCoin(double value)

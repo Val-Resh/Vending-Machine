@@ -11,11 +11,11 @@ class Wallet
 public:
 	Wallet(std::vector<InterfaceCoin*>* wallet) { this->wallet = wallet; };
 	~Wallet();
-	void putCoin(InterfaceCoin *coin);
+	void putCoin(InterfaceCoin& coin);
 	InterfaceCoin* retrieveCoin(double value);
 	void displayWallet();
 
 private:
-	std::vector<InterfaceCoin*>* wallet;
+	std::vector<InterfaceCoin*> *wallet;
 };
 

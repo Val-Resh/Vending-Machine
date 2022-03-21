@@ -9,7 +9,7 @@ ____________________________
 
 ## Demo:
 
-*insert image here*
+![Demo](https://github.com/Val-Resh/Vending-Machine/blob/main/DemoImage/Demo.JPG)
 
 Commands work as intended. Follow instructions to use.
 

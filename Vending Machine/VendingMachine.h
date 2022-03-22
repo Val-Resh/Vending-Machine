@@ -26,11 +26,11 @@ public:
 
 
 private:
+	double coinsInHold = 0.00;
 	ProductFactory *productFactory;
 	std::map<std::string, int>* productsWithCount;
 	std::vector<InterfaceCoin*> coinsInHolder;
 	std::vector<InterfaceCoin*>* coinsInMachine;
-	double calculateCoinsInHolder();
 	void placeCoinsFromHolderToMachine();
 	std::vector<InterfaceCoin*> getChange(double value);
 };

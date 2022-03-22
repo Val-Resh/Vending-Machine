@@ -41,26 +41,16 @@ VendingMachine::~VendingMachine()
 void VendingMachine::insertCoin(InterfaceCoin* coin)
 {
 	this->coinsInHolder.push_back(coin);
+	this->coinsInHold += coin->getValue();
 }
 
 void VendingMachine::displayCoinsInHolder()
 {
-	std::cout << "Inserted Coins Total: " << calculateCoinsInHolder() << std::endl;
-}
-
-double VendingMachine::calculateCoinsInHolder()
-{	
-	double sum = 0.00;
-	for (auto& coin : coinsInHolder)
-	{	
-		sum += coin->getValue();
-	}
-	return sum;
+	std::cout << "Inserted Coins Total: " << coinsInHold << std::endl;
 }
 
 void VendingMachine::purchaseProduct(Wallet* wallet, std::string product)
 {
-	double totalCoinsInHolder = calculateCoinsInHolder();
 	for (auto& pairs : *productsWithCount)
 	{
 		if (pairs.first == product)
@@ -69,10 +59,10 @@ void VendingMachine::purchaseProduct(Wallet* wallet, std::string product)
 			{
 				ProductInterface* prod = this->productFactory->getProductInstance(product);
 				double productPrice = prod->getPrice();
-				if (productPrice <= totalCoinsInHolder)
+				if (productPrice <= coinsInHold)
 				{
 					std::cout << "You have purchased a " << prod->getProductName() << "\n" << std::endl;
-					double change = totalCoinsInHolder - productPrice;
+					double change = coinsInHold - productPrice;
 					placeCoinsFromHolderToMachine();
 					std::vector<InterfaceCoin*> changeCoins = getChange(change);
 					for (auto& coin : changeCoins)
@@ -106,6 +96,7 @@ void VendingMachine::placeCoinsFromHolderToMachine()
 	{
 		coinsInMachine->push_back(coinsInHolder.at(i));
 	}
+	this->coinsInHold = 0.00;
 	coinsInHolder.clear();
 }
 
